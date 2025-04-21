@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PetSync</string>
+    <string name="app_logo">Application Logo</string>
+    <string name="login_subtitle">Connect with your pets and pet services</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="login">Login</string>
+    <string name="no_account">Don\'t have an account?</string>
+    <string name="register">Register Now</string>
+    <string name="create_account">Create Account</string>
+    <string name="full_name">Full Name</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="user">User</string>
+    <string name="organization">Organization</string>
+    <string name="already_have_account">Already have an account?</string>
+    <string name="app_tagline">Care for your pets, simplified</string>
+    <string name="no_pets_available">No pets available</string>
+    <string name="add_pet">Add Pet</string>
+    <string name="pet_image">Pet Image</string>
+    <string name="settings">Settings</string>
+    <string name="logout">Logout</string>
+    <!-- Navigation strings from your navigation XML -->
+    <string name="title_home">Home</string>
+    <string name="title_pets">Pets</string>
+    <string name="title_shops">Shops</string>
+    <string name="title_profile">Profile</string>
+</resources>
