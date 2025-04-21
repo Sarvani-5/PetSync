@@ -1,10 +1,12 @@
 package com.example.petsync.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.petsync.R
 import com.example.petsync.databinding.ItemAdoptionRequestBinding
 import com.example.petsync.models.AdoptionRequest
 import com.example.petsync.models.RequestStatus
@@ -15,7 +17,8 @@ import java.util.Locale
 class AdoptionRequestAdapter(
     private val onApprove: (AdoptionRequest) -> Unit,
     private val onReject: (AdoptionRequest) -> Unit,
-    private val onViewDetails: (AdoptionRequest) -> Unit
+    private val onViewDetails: (AdoptionRequest) -> Unit,
+    private val seenRequestIds: Set<String> = emptySet()
 ) : ListAdapter<AdoptionRequest, AdoptionRequestAdapter.RequestViewHolder>(RequestDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RequestViewHolder {
@@ -69,6 +72,17 @@ class AdoptionRequestAdapter(
             val isPending = request.status == RequestStatus.PENDING
             binding.btnApprove.isEnabled = isPending
             binding.btnReject.isEnabled = isPending
+
+            // Highlight new requests
+            if (isPending && !seenRequestIds.contains(request.id)) {
+                binding.cardContainer.setCardBackgroundColor(binding.root.context.getColor(R.color.new_request_bg))
+                binding.ivNewIndicator.visibility = View.VISIBLE
+                binding.tvNewTag.visibility = View.VISIBLE
+            } else {
+                binding.cardContainer.setCardBackgroundColor(binding.root.context.getColor(R.color.white))
+                binding.ivNewIndicator.visibility = View.GONE
+                binding.tvNewTag.visibility = View.GONE
+            }
         }
     }
 

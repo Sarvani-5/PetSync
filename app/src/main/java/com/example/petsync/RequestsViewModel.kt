@@ -15,6 +15,13 @@ class RequestsViewModel : ViewModel() {
     private val _requests = MutableLiveData<List<AdoptionRequest>>()
     val requests: LiveData<List<AdoptionRequest>> = _requests
 
+    // Add the new requests count LiveData
+    private val _newRequestsCount = MutableLiveData<Int>()
+    val newRequestsCount: LiveData<Int> = _newRequestsCount
+
+    // Set to track seen request IDs
+    private val seenRequestIds = mutableSetOf<String>()
+
     fun loadOrganizationRequests(organizationId: String) {
         db.collection("adoption_requests")
             .whereEqualTo("organizationId", organizationId)
@@ -27,6 +34,10 @@ class RequestsViewModel : ViewModel() {
                 if (snapshot != null) {
                     val requestsList = snapshot.toObjects(AdoptionRequest::class.java)
                     _requests.value = requestsList
+
+                    // Count new requests (those not in seenRequestIds)
+                    val newRequests = requestsList.filter { !seenRequestIds.contains(it.id) }
+                    _newRequestsCount.value = newRequests.size
                 }
             }
     }
@@ -43,6 +54,9 @@ class RequestsViewModel : ViewModel() {
                 if (snapshot != null) {
                     val requestsList = snapshot.toObjects(AdoptionRequest::class.java)
                     _requests.value = requestsList
+
+                    // For regular users, we don't track new requests
+                    _newRequestsCount.value = 0
                 }
             }
     }
@@ -79,5 +93,21 @@ class RequestsViewModel : ViewModel() {
             .addOnFailureListener { e ->
                 onFailure(e)
             }
+    }
+
+    // Add function to mark requests as seen
+    fun markRequestsAsSeen(requestIds: List<String>) {
+        seenRequestIds.addAll(requestIds)
+
+        // Recalculate new requests count
+        _requests.value?.let { requests ->
+            val newRequests = requests.filter { !seenRequestIds.contains(it.id) }
+            _newRequestsCount.value = newRequests.size
+        }
+    }
+
+    // Add function to get seen request IDs
+    fun getSeenRequestIds(): Set<String> {
+        return seenRequestIds
     }
 }

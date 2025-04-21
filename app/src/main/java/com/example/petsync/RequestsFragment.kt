@@ -14,7 +14,6 @@ import com.example.petsync.databinding.FragmentRequestsBinding
 import com.example.petsync.models.AdoptionRequest
 import com.example.petsync.models.RequestStatus
 import com.example.petsync.models.UserType
-import com.example.petsync.ui.requests.RequestDetailFragment
 import com.example.petsync.utils.NotificationUtils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -53,15 +52,14 @@ class RequestsFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
-        // Setup RecyclerView
-        setupRecyclerView()
-
         // Check user type and load appropriate requests
         checkUserType()
 
         // Observe requests
         viewModel.requests.observe(viewLifecycleOwner) { requests ->
-            requestAdapter.submitList(requests)
+            // Update adapter with new data and the set of seen request IDs
+            setupRecyclerView(requests)
+
             binding.progressBar.visibility = View.GONE
 
             if (requests.isEmpty()) {
@@ -69,10 +67,30 @@ class RequestsFragment : Fragment() {
             } else {
                 binding.tvNoRequests.visibility = View.GONE
             }
+
+            // Mark all visible requests as seen if organization
+            if (userType == UserType.ORGANIZATION) {
+                viewModel.markRequestsAsSeen(requests.map { it.id })
+            }
+        }
+
+        // Observe new requests count (only relevant for organizations)
+        viewModel.newRequestsCount.observe(viewLifecycleOwner) { count ->
+            if (userType == UserType.ORGANIZATION) {
+                if (count > 0) {
+                    binding.tvNewRequestsBadge.text = count.toString()
+                    binding.tvNewRequestsBadge.visibility = View.VISIBLE
+                    binding.tvNewRequestsInfo.visibility = View.VISIBLE
+                    binding.tvNewRequestsInfo.text = "You have $count new adoption request${if (count > 1) "s" else ""}!"
+                } else {
+                    binding.tvNewRequestsBadge.visibility = View.GONE
+                    binding.tvNewRequestsInfo.visibility = View.GONE
+                }
+            }
         }
     }
 
-    private fun setupRecyclerView() {
+    private fun setupRecyclerView(requests: List<AdoptionRequest>) {
         requestAdapter = AdoptionRequestAdapter(
             onApprove = { request ->
                 approveRequest(request)
@@ -82,17 +100,22 @@ class RequestsFragment : Fragment() {
             },
             onViewDetails = { request ->
                 showRequestDetails(request)
-            }
+            },
+            seenRequestIds = viewModel.getSeenRequestIds()
         )
 
         binding.recyclerViewRequests.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = requestAdapter
         }
+
+        requestAdapter.submitList(requests)
     }
 
     private fun checkUserType() {
         val userId = auth.currentUser?.uid ?: return
+
+        binding.progressBar.visibility = View.VISIBLE
 
         db.collection("users").document(userId).get()
             .addOnSuccessListener { document ->
@@ -100,10 +123,25 @@ class RequestsFragment : Fragment() {
                     val userTypeString = document.getString("userType") ?: UserType.USER.name
                     userType = UserType.valueOf(userTypeString)
 
+                    // Configure UI based on user type
+                    configureUIForUserType()
+
                     // Load requests based on user type
                     loadRequests()
                 }
             }
+    }
+
+    private fun configureUIForUserType() {
+        // Show/hide UI elements based on user type
+        if (userType == UserType.ORGANIZATION) {
+            binding.tvTitle.text = "Adoption Requests"
+        } else {
+            binding.tvTitle.text = "My Requests"
+            // Hide notification elements for regular users
+            binding.tvNewRequestsBadge.visibility = View.GONE
+            binding.tvNewRequestsInfo.visibility = View.GONE
+        }
     }
 
     private fun loadRequests() {

@@ -44,6 +44,8 @@ dependencies {
     // Use Firebase BOM (Bill of Materials) for version coordination
     implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
     implementation("com.google.android.gms:play-services-base:18.2.0")
+    // Make sure you have this dependency
+    implementation("com.google.android.gms:play-services-auth:20.7.0") // Use the latest version
     // Core dependencies
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

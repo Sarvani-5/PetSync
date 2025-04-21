@@ -3,20 +3,26 @@
     <item
         android:id="@+id/navigation_home"
         android:icon="@drawable/ic_home"
-        android:title="@string/title_home" />
+        android:title="Home" />
 
     <item
         android:id="@+id/navigation_pets"
         android:icon="@drawable/ic_pets"
-        android:title="@string/title_pets" />
+        android:title="Pets" />
 
     <item
         android:id="@+id/navigation_shops"
         android:icon="@drawable/ic_shops"
-        android:title="@string/title_shops" />
+        android:title="Shops" />
+
+    <item
+        android:id="@+id/navigation_requests"
+        android:icon="@drawable/ic_settings"
+        android:title="Requests"
+        android:visible="false" /> <!-- Hidden by default, shown only for organizations -->
 
     <item
         android:id="@+id/navigation_profile"
         android:icon="@drawable/ic_profile"
-        android:title="@string/title_profile" />
+        android:title="Profile" />
 </menu>

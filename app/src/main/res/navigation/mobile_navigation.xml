@@ -9,23 +9,94 @@
         android:id="@+id/navigation_home"
         android:name="com.example.petsync.ui.home.HomeFragment"
         android:label="Home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_home_to_pets"
+            app:destination="@id/navigation_pets" />
+        <action
+            android:id="@+id/action_home_to_shops"
+            app:destination="@id/navigation_shops" />
+        <action
+            android:id="@+id/action_home_to_profile"
+            app:destination="@id/navigation_profile" />
+        <action
+            android:id="@+id/action_home_to_requests"
+            app:destination="@id/navigation_requests" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_pets"
         android:name="com.example.petsync.ui.pets.PetsFragment"
         android:label="Pets"
-        tools:layout="@layout/fragment_pets" />
+        tools:layout="@layout/fragment_pets">
+        <action
+            android:id="@+id/action_pets_to_home"
+            app:destination="@id/navigation_home" />
+        <action
+            android:id="@+id/action_pets_to_shops"
+            app:destination="@id/navigation_shops" />
+        <action
+            android:id="@+id/action_pets_to_profile"
+            app:destination="@id/navigation_profile" />
+        <action
+            android:id="@+id/action_pets_to_requests"
+            app:destination="@id/navigation_requests" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_shops"
         android:name="com.example.petsync.ui.shops.ShopsFragment"
         android:label="Shops"
-        tools:layout="@layout/fragment_shops" />
+        tools:layout="@layout/fragment_shops">
+        <action
+            android:id="@+id/action_shops_to_home"
+            app:destination="@id/navigation_home" />
+        <action
+            android:id="@+id/action_shops_to_pets"
+            app:destination="@id/navigation_pets" />
+        <action
+            android:id="@+id/action_shops_to_profile"
+            app:destination="@id/navigation_profile" />
+        <action
+            android:id="@+id/action_shops_to_requests"
+            app:destination="@id/navigation_requests" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.example.petsync.ui.profile.ProfileFragment"
         android:label="Profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profile_to_home"
+            app:destination="@id/navigation_home" />
+        <action
+            android:id="@+id/action_profile_to_pets"
+            app:destination="@id/navigation_pets" />
+        <action
+            android:id="@+id/action_profile_to_shops"
+            app:destination="@id/navigation_shops" />
+        <action
+            android:id="@+id/action_profile_to_requests"
+            app:destination="@id/navigation_requests" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_requests"
+        android:name="com.example.petsync.ui.requests.RequestsFragment"
+        android:label="Requests"
+        tools:layout="@layout/fragment_requests">
+        <action
+            android:id="@+id/action_requests_to_home"
+            app:destination="@id/navigation_home" />
+        <action
+            android:id="@+id/action_requests_to_pets"
+            app:destination="@id/navigation_pets" />
+        <action
+            android:id="@+id/action_requests_to_shops"
+            app:destination="@id/navigation_shops" />
+        <action
+            android:id="@+id/action_requests_to_profile"
+            app:destination="@id/navigation_profile" />
+    </fragment>
 </navigation>

@@ -8,24 +8,30 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.petsync.ui.home.HomeFragment"
-        android:label="@string/title_home"
+        android:label="Home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_pets"
         android:name="com.example.petsync.ui.pets.PetsFragment"
-        android:label="@string/title_pets"
+        android:label="Pets"
         tools:layout="@layout/fragment_pets" />
 
     <fragment
         android:id="@+id/navigation_shops"
         android:name="com.example.petsync.ui.shops.ShopsFragment"
-        android:label="@string/title_shops"
+        android:label="Shops"
         tools:layout="@layout/fragment_shops" />
 
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.example.petsync.ui.profile.ProfileFragment"
-        android:label="@string/title_profile"
+        android:label="Profile"
         tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/navigation_requests"
+        android:name="com.example.petsync.ui.requests.RequestsFragment"
+        android:label="Requests"
+        tools:layout="@layout/fragment_requests" />
 </navigation>
