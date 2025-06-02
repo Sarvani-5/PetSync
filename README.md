@@ -29,14 +29,26 @@
 
 ## 📸 Screenshots
 
-```
-📍 Home Screen  
-🛒 Pet Shop Page  
-📆 Appointment Booking  
-🔔 Notifications & Reminders  
-📍 Nearby Pet Orgs (Map)  
-🐕 Pet Organization Dashboard  
-```
+Here are some visuals of the PetSync app:
+
+### 🏠 PetSync-App
+![Home](screenshots/home.png)
+
+### 🐕 Pet Listings
+![Pets](screenshots/pet_list.png)
+
+### 📅 Appointment Booking
+![Booking](screenshots/booking.png)
+
+### 🛍️ Pet Shop
+![Shop](screenshots/shop.png)
+
+### 🗺️ Nearby Organizations (OpenStreetMap)
+![Map](screenshots/map.png)
+
+### 📨 Organization Request Management
+![Request](screenshots/org_requests.png)
+
 
 ## 📥 How to Clone & Run the Project
 
