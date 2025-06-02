@@ -29,8 +29,6 @@
 
 ## 📸 Screenshots
 
-> Add your app screenshots here. Suggested sections:
-
 ```
 📍 Home Screen  
 🛒 Pet Shop Page  
@@ -46,7 +44,7 @@
 2. Click on `File` → `New` → `Project from Version Control`.
 3. Paste the repository URL:
    ```
-   https://github.com/your-username/petsync-app.git
+   https://github.com/Sarvani-5/PetSync.git
    ```
 4. Click `Clone`.
 
