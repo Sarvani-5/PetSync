@@ -50,7 +50,7 @@ Here are some visuals of the PetSync app:
   <img src="screenshots/home41.jpg" width="200" />
 </p>
 
-<h3>User Features</h3>
+<h3>👤User Features</h3>
 
 <p align="center">
   <img src="screenshots/user1.jpg" width="200" />
