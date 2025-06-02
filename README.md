@@ -41,37 +41,40 @@
 
 Here are some visuals of the PetSync app:
 
-### 🏠 App Entry Screens
-![Launching Page](screenshots/home2.jpg)
-![Login](screenshots/home3.jpg)
-![Register](screenshots/home40.jpg)
-![Home](screenshots/home41.jpg)
+<h3>🏠 PetSync-App Screens</h3>
 
----
+<p align="center">
+  <img src="screenshots/home2.jpg" width="200" />
+  <img src="screenshots/home3.jpg" width="200" />
+  <img src="screenshots/home40.jpg" width="200" />
+  <img src="screenshots/home41.jpg" width="200" />
+</p>
 
-### 👤 User Features
-![Pets](screenshots/user1.jpg)
-![Pet Details](screenshots/user2.jpg)
-![Pet Adoption](screenshots/user3.jpg)
-![Pet Shop Visit](screenshots/user4.jpg)
-![Shop](screenshots/user50.jpg)
-![Cart](screenshots/user51.jpg)
-![Map](screenshots/user8.jpg)
-![Profile](screenshots/user6.jpg)
+<h3>User Features</h3>
 
----
+<p align="center">
+  <img src="screenshots/user1.jpg" width="200" />
+  <img src="screenshots/user2.jpg" width="200" />
+  <img src="screenshots/user3.jpg" width="200" />
+  <img src="screenshots/user4.jpg" width="200" />
+  <img src="screenshots/user50.jpg" width="200" />
+  <img src="screenshots/user51.jpg" width="200" />
+  <img src="screenshots/user8.jpg" width="200" />
+  <img src="screenshots/user6.jpg" width="200" />
+</p>
 
-### 🏢 Organization Features
-![Add Pets](screenshots/org1.jpg)
-![Add Pets Form](screenshots/org2.jpg)
-![Pets List](screenshots/org3.jpg)
-![SMS Confirmation](screenshots/org4.jpg)
-![Approve Request](screenshots/org5.jpg)
-![WhatsApp Message](screenshots/org7.jpg)
-![Approved Pets](screenshots/org6.jpg)
-![Org Profile](screenshots/org8.jpg)
+<h3>📨 Organization Feature</h3>
 
----
+<p align="center">
+  <img src="screenshots/org1.jpg" width="200" />
+  <img src="screenshots/org2.jpg" width="200" />
+  <img src="screenshots/org3.jpg" width="200" />
+  <img src="screenshots/org4.jpg" width="200" />
+  <img src="screenshots/org5.jpg" width="200" />
+  <img src="screenshots/org6.jpg" width="200" />
+  <img src="screenshots/org7.jpg" width="200" />
+  <img src="screenshots/org8.jpg" width="200" />
+</p>
 
 ## 📥 How to Clone & Run the Project
 
