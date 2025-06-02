@@ -2,7 +2,10 @@
 <resources>
     <color name="navy_blue">#003366</color>
     <color name="text_secondary">#757575</color>
-
+    <color name="colorPrimary">#4CAF50</color>
+    <color name="colorPrimaryDark">#388E3C</color>
+    <color name="colorAccent">#8BC34A</color>
+    <color name="colorError">#F44336</color>
     <color name="primary_dark">#388E3C</color>
     <color name="accent">#8BC34A</color>
     <color name="text_primary">#212121</color>
@@ -23,4 +26,30 @@
     <color name="background">#FFFAFAFA</color>
     <color name="surface">#FFFFFFFF</color>
     <color name="error">#FFB00020</color>
+    <!-- Primary Colors -->
+
+    <color name="primary_light">#C8E6C9</color>
+
+    <!-- General UI Colors -->
+    <color name="background_light">#F9F9F9</color>
+
+    <!-- Text Colors -->
+    <color name="text_tertiary">#9E9E9E</color>
+
+    <!-- Feature Card Background Colors -->
+    <color name="feature_card_bg1">#E8F5E9</color>
+    <color name="feature_card_bg2">#FFF3E0</color>
+    <color name="feature_card_bg3">#E0F7FA</color>
+
+    <!-- Pet Category Card Colors -->
+    <color name="card_dog">#BBDEFB</color>
+    <color name="card_cat">#F8BBD0</color>
+    <color name="card_bird">#D7CCC8</color>
+    <color name="card_small">#DCEDC8</color>
+    <color name="card_fish">#B3E5FC</color>
+
+    <!-- Status Colors -->
+    <color name="success">#4CAF50</color>
+    <color name="warning">#FFC107</color>
+    <color name="info">#2196F3</color>
 </resources>

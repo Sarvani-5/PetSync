@@ -353,39 +353,64 @@ class RequestDetailFragment : Fragment() {
     private fun notifyUser(request: AdoptionRequest, action: String) {
         // Get user details
         db.collection("users").document(request.userId).get()
-            .addOnSuccessListener { document ->
-                if (document != null && document.exists()) {
-                    val user = document.toObject(User::class.java)
-                    user?.let {
-                        context?.let { ctx ->
-                            // Send SMS notification
-                            NotificationUtils.sendSMS(
-                                ctx,
-                                it.phone,
-                                "Your adoption request for ${request.petName} has been $action."
-                            )
+            .addOnSuccessListener { userDocument ->
+                if (userDocument != null && userDocument.exists()) {
+                    val user = userDocument.toObject(User::class.java)
 
-                            // Send app notification
-                            NotificationUtils.showNotification(
-                                ctx,
-                                "Adoption Request $action",
-                                "Your request for ${request.petName} has been $action."
-                            )
+                    // Get organization details for address
+                    db.collection("users").document(request.organizationId).get()
+                        .addOnSuccessListener { orgDocument ->
+                            if (orgDocument != null && orgDocument.exists()) {
+                                val organization = orgDocument.toObject(User::class.java)
+                                val orgAddress = organization?.address ?: ""
 
-                            // Try to send WhatsApp message
-                            try {
-                                NotificationUtils.sendWhatsAppMessage(
-                                    ctx,
-                                    it.phone,
-                                    "Your adoption request for ${request.petName} has been $action. " +
-                                            "Please check the app for more details."
-                                )
-                            } catch (e: Exception) {
-                                // WhatsApp error is not critical
-                                e.printStackTrace()
+                                // Create Google Maps link from address
+                                val mapsLink = if (orgAddress.isNotEmpty()) {
+                                    "https://maps.google.com/?q=${Uri.encode(orgAddress)}"
+                                } else {
+                                    ""
+                                }
+
+                                user?.let {
+                                    context?.let { ctx ->
+                                        // Send SMS notification
+                                        NotificationUtils.sendSMS(
+                                            ctx,
+                                            it.phone,
+                                            "Your adoption request for ${request.petName} has been $action."
+                                        )
+
+                                        // Send app notification
+                                        NotificationUtils.showNotification(
+                                            ctx,
+                                            "Adoption Request $action",
+                                            "Your request for ${request.petName} has been $action."
+                                        )
+
+                                        // Try to send WhatsApp message with location link
+                                        try {
+                                            val whatsappMessage = if (mapsLink.isNotEmpty()) {
+                                                "Your adoption request for ${request.petName} has been $action. " +
+                                                        "Please check the app for more details.\n\n" +
+                                                        "Organization location: $mapsLink"
+                                            } else {
+                                                "Your adoption request for ${request.petName} has been $action. " +
+                                                        "Please check the app for more details."
+                                            }
+
+                                            NotificationUtils.sendWhatsAppMessage(
+                                                ctx,
+                                                it.phone,
+                                                whatsappMessage
+                                            )
+                                        } catch (e: Exception) {
+                                            // WhatsApp error is not critical
+                                            e.printStackTrace()
+                                        }
+                                    }
+                                }
                             }
                         }
-                    }
                 }
             }
     }

@@ -23,6 +23,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
     private var isOrganization = false
+    private var mapMenuItem: MenuItem? = null
+    private var reminderMenuItem: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_PetSync_NoActionBar)
@@ -107,6 +109,11 @@ class MainActivity : AppCompatActivity() {
                     // Show Requests tab only for organizations
                     val requestsMenuItem = navView.menu.findItem(R.id.navigation_requests)
                     requestsMenuItem.isVisible = isOrganization
+
+                    // Update options menu if it's already created
+                    mapMenuItem?.isVisible = !isOrganization
+                    reminderMenuItem?.isVisible = !isOrganization
+                    invalidateOptionsMenu()
                 }
             }
             .addOnFailureListener {
@@ -114,16 +121,38 @@ class MainActivity : AppCompatActivity() {
                 isOrganization = false
                 val requestsMenuItem = navView.menu.findItem(R.id.navigation_requests)
                 requestsMenuItem.isVisible = false
+
+                // Update options menu if it's already created
+                mapMenuItem?.isVisible = true
+                reminderMenuItem?.isVisible = true
+                invalidateOptionsMenu()
             }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
+        mapMenuItem = menu.findItem(R.id.action_map)
+        reminderMenuItem = menu.findItem(R.id.action_reminder)
+
+        // Show map and reminder buttons only for regular users
+        mapMenuItem?.isVisible = !isOrganization
+        reminderMenuItem?.isVisible = !isOrganization
+
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.action_map -> {
+                val intent = Intent(this, PetOrganizationsMapActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            R.id.action_reminder -> {
+                val intent = Intent(this, PetReminderActivity::class.java)
+                startActivity(intent)
+                true
+            }
             R.id.action_settings -> {
                 val intent = Intent(this, SettingsActivity::class.java)
                 startActivity(intent)

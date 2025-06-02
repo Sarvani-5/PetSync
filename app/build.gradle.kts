@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("com.google.gms.google-services")  // Added Google Services plugin for Firebase
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -38,14 +38,30 @@ android {
         viewBinding = true
     }
 
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/com/j256/ormlite/core/README.txt"
+        }
+    }
 }
 
 dependencies {
-    // Use Firebase BOM (Bill of Materials) for version coordination
+    // Firebase BOM (Bill of Materials) - this will manage all firebase versions
     implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+    // Firebase dependencies - versions managed by BOM
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-storage-ktx")
+    implementation("com.google.firebase:firebase-messaging-ktx")
+    implementation("com.google.firebase:firebase-analytics-ktx")
+
+    // Play services
     implementation("com.google.android.gms:play-services-base:18.2.0")
-    // Make sure you have this dependency
-    implementation("com.google.android.gms:play-services-auth:20.7.0") // Use the latest version
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+
     // Core dependencies
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -55,15 +71,8 @@ dependencies {
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
 
-    // Firebase dependencies - use BOM approach (no versions needed)
-    implementation("com.google.firebase:firebase-auth-ktx")
-    implementation("com.google.firebase:firebase-firestore")
-    implementation("com.google.firebase:firebase-storage")
-    implementation("com.google.firebase:firebase-messaging")
-    implementation("com.google.firebase:firebase-analytics")
-
     // Image loading libraries
-    implementation("com.squareup.picasso:picasso:2.71828")
+    implementation("com.squareup.picasso:picasso:2.8")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
 
@@ -72,8 +81,21 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation("com.airbnb.android:lottie:6.1.0")
 
-    // Testing
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    // Maps
+    implementation("org.osmdroid:osmdroid-android:6.1.16")
+    implementation("org.osmdroid:osmdroid-wms:6.1.16")
+    implementation("org.osmdroid:osmdroid-mapsforge:6.1.16")
+    implementation("org.osmdroid:osmdroid-geopackage:6.1.16")
+
+    // ORM Lite
+    implementation("com.j256.ormlite:ormlite-android:6.1")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+}
+
+configurations.all {
+    // Exclude duplicate classes
+    exclude(group = "com.j256.ormlite", module = "ormlite-core")
+    resolutionStrategy {
+        force("com.google.firebase:firebase-common:20.4.2")
+    }
 }

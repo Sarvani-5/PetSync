@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:background="@android:color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:background="@android:color/white">
 
         <TextView
             android:id="@+id/tvTitle"
@@ -18,6 +20,7 @@
             android:text="Add New Pet"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -37,7 +40,8 @@
                 android:id="@+id/etPetName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text" />
+                android:inputType="text"
+                android:background="@android:color/white" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -55,7 +59,8 @@
                 android:id="@+id/etPetType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text" />
+                android:inputType="text"
+                android:background="@android:color/white" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -73,7 +78,8 @@
                 android:id="@+id/etPetBreed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text" />
+                android:inputType="text"
+                android:background="@android:color/white" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -92,7 +98,8 @@
                 android:id="@+id/etPetAge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number" />
+                android:inputType="number"
+                android:background="@android:color/white" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -111,7 +118,8 @@
                 android:id="@+id/etPetPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal" />
+                android:inputType="numberDecimal"
+                android:background="@android:color/white" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -131,7 +139,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="top"
                 android:inputType="textMultiLine"
-                android:lines="5" />
+                android:lines="5"
+                android:background="@android:color/white" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -142,6 +151,7 @@
             android:text="Pet Images"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:textColor="@android:color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tilPetDescription" />
 
@@ -161,6 +171,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="0 images selected"
+            android:textColor="@android:color/black"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/btnAddImage"
             app:layout_constraintStart_toEndOf="@+id/btnAddImage"

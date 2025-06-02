@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider  // Added import
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.petsync.R
 import com.example.petsync.databinding.DialogAdoptionRequestBinding
@@ -72,7 +72,10 @@ class PetDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPetDetailBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this)[PetDetailViewModel::class.java]  // Fixed order
+        viewModel = ViewModelProvider(this)[PetDetailViewModel::class.java]
+
+        // Set the root view background to ensure no transparency
+        binding.root.setBackgroundResource(android.R.color.white)
 
         return binding.root
     }
@@ -108,7 +111,7 @@ class PetDetailFragment : Fragment() {
 
         // Set up back button
         binding.btnBack.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            requireActivity().onBackPressed()
         }
     }
 
@@ -143,12 +146,16 @@ class PetDetailFragment : Fragment() {
     }
 
     private fun updateUI(pet: Pet) {
-        binding.tvPetName.text = pet.name
+        // Update header card
+        binding.tvPetNameHeader.text = pet.name
+        binding.tvPetPriceHeader.text = "Price: $${pet.price}"
+
+        // Update details section
         binding.tvPetType.text = "Type: ${pet.type}"
         binding.tvPetBreed.text = "Breed: ${pet.breed}"
         binding.tvPetAge.text = "Age: ${pet.age} years"
-        binding.tvPetPrice.text = "Price: $${pet.price}"
         binding.tvPetDescription.text = pet.description
+        binding.tvPrice.text = "$${pet.price}"
 
         // Load first image if available
         if (pet.imageUrls.isNotEmpty()) {
@@ -192,7 +199,6 @@ class PetDetailFragment : Fragment() {
         val pet = currentPet ?: return
         val user = currentUser ?: return
 
-        // Fixed binding initialization
         val dialogBinding = DialogAdoptionRequestBinding.inflate(LayoutInflater.from(requireContext()))
 
         val dialog = AlertDialog.Builder(requireContext())
@@ -204,14 +210,51 @@ class PetDetailFragment : Fragment() {
         // Set initial values
         dialogBinding.tvPetName.text = "Pet: ${pet.name}"
 
-        // Set up date picker - ensure they're using local variables not properties
+        // Set up date picker
         dialogBinding.etDate.setOnClickListener {
-            showDatePicker(dialogBinding)
+            val calendar = Calendar.getInstance()
+
+            val dateListener = DatePickerDialog.OnDateSetListener { _, year, month, day ->
+                calendar.set(Calendar.YEAR, year)
+                calendar.set(Calendar.MONTH, month)
+                calendar.set(Calendar.DAY_OF_MONTH, day)
+
+                selectedDate = calendar.timeInMillis
+                dialogBinding.etDate.setText(dateFormatter.format(calendar.time))
+            }
+
+            DatePickerDialog(
+                requireContext(),
+                dateListener,
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            ).apply {
+                // Set min date to today
+                datePicker.minDate = System.currentTimeMillis() - 1000
+                show()
+            }
         }
 
         // Set up time picker
         dialogBinding.etTime.setOnClickListener {
-            showTimePicker(dialogBinding)
+            val calendar = Calendar.getInstance()
+
+            val timeListener = TimePickerDialog.OnTimeSetListener { _, hour, minute ->
+                calendar.set(Calendar.HOUR_OF_DAY, hour)
+                calendar.set(Calendar.MINUTE, minute)
+
+                selectedTime = timeFormatter.format(calendar.time)
+                dialogBinding.etTime.setText(selectedTime)
+            }
+
+            TimePickerDialog(
+                requireContext(),
+                timeListener,
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE),
+                false
+            ).show()
         }
 
         // Set up buttons
@@ -233,51 +276,6 @@ class PetDetailFragment : Fragment() {
         }
 
         dialog.show()
-    }
-
-    private fun showDatePicker(dialogBinding: DialogAdoptionRequestBinding) {
-        val calendar = Calendar.getInstance()
-
-        val dateListener = DatePickerDialog.OnDateSetListener { _, year, month, day ->
-            calendar.set(Calendar.YEAR, year)
-            calendar.set(Calendar.MONTH, month)
-            calendar.set(Calendar.DAY_OF_MONTH, day)
-
-            selectedDate = calendar.timeInMillis
-            dialogBinding.etDate.setText(dateFormatter.format(calendar.time))
-        }
-
-        DatePickerDialog(
-            requireContext(),
-            dateListener,
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        ).apply {
-            // Set min date to today
-            datePicker.minDate = System.currentTimeMillis() - 1000
-            show()
-        }
-    }
-
-    private fun showTimePicker(dialogBinding: DialogAdoptionRequestBinding) {
-        val calendar = Calendar.getInstance()
-
-        val timeListener = TimePickerDialog.OnTimeSetListener { _, hour, minute ->
-            calendar.set(Calendar.HOUR_OF_DAY, hour)
-            calendar.set(Calendar.MINUTE, minute)
-
-            selectedTime = timeFormatter.format(calendar.time)
-            dialogBinding.etTime.setText(selectedTime)
-        }
-
-        TimePickerDialog(
-            requireContext(),
-            timeListener,
-            calendar.get(Calendar.HOUR_OF_DAY),
-            calendar.get(Calendar.MINUTE),
-            false
-        ).show()
     }
 
     private fun submitAdoptionRequest(pet: Pet, user: User, message: String) {

@@ -11,10 +11,13 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.petsync.MainActivity
 import com.example.petsync.R
+import com.example.petsync.ViewRemindersActivity
+import com.example.petsync.managers.RemindersManager
 
 object NotificationUtils {
 
     private const val CHANNEL_ID = "petsync_notification_channel"
+    private const val REMINDER_CHANNEL_ID = "petsync_reminder_channel"
     private const val NOTIFICATION_ID = 1001
 
     fun showNotification(context: Context, title: String, message: String) {
@@ -55,6 +58,62 @@ object NotificationUtils {
 
         // Show notification
         notificationManager.notify(NOTIFICATION_ID, notification)
+    }
+
+    fun showReminderNotification(context: Context, reminderId: String, title: String, message: String) {
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        // Create reminder notification channel for API 26+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                REMINDER_CHANNEL_ID,
+                "Pet Reminders",
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "Important pet care reminders"
+                enableVibration(true)
+                enableLights(true)
+            }
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        // Create intent for viewing reminders
+        val intent = Intent(context, ViewRemindersActivity::class.java)
+
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            reminderId.hashCode(),
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        // Create action for marking as completed
+        val markCompletedIntent = Intent(context, ReminderActionReceiver::class.java).apply {
+            action = "MARK_COMPLETED"
+            putExtra("reminder_id", reminderId)
+        }
+
+        val markCompletedPendingIntent = PendingIntent.getBroadcast(
+            context,
+            reminderId.hashCode() + 100,
+            markCompletedIntent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        // Build notification with action
+        val notification = NotificationCompat.Builder(context, REMINDER_CHANNEL_ID)
+            .setContentTitle(title)
+            .setContentText(message)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(message))
+            .setSmallIcon(R.drawable.ic_notification) // Create a specific icon for reminders
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setContentIntent(pendingIntent)
+            .addAction(R.drawable.ic_check, "Mark as Done", markCompletedPendingIntent)
+            .setAutoCancel(true)
+            .build()
+
+        // Show notification with unique ID based on reminder ID
+        notificationManager.notify(reminderId.hashCode(), notification)
     }
 
     fun sendSMS(context: Context, phoneNumber: String, message: String) {
@@ -109,6 +168,30 @@ object NotificationUtils {
                 context.startActivity(browserIntent)
             } catch (e2: Exception) {
                 Log.e("NotificationUtils", "Failed to open WhatsApp: ${e2.message}")
+            }
+        }
+    }
+}
+
+// Create this class to handle the notification action
+class ReminderActionReceiver : android.content.BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        if (intent.action == "MARK_COMPLETED") {
+            val reminderId = intent.getStringExtra("reminder_id") ?: return
+
+            // Get RemindersManager and mark as completed
+            val remindersManager = RemindersManager(context)
+            remindersManager.markReminderAsCompleted(reminderId) { success ->
+                if (success) {
+                    Log.d("ReminderActionReceiver", "Reminder marked as completed: $reminderId")
+
+                    // Cancel the notification
+                    val notificationManager =
+                        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                    notificationManager.cancel(reminderId.hashCode())
+                } else {
+                    Log.e("ReminderActionReceiver", "Failed to mark reminder as completed")
+                }
             }
         }
     }

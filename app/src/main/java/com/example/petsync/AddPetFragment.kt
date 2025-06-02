@@ -46,14 +46,31 @@ class AddPetFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        // Create a new instance of the ViewModel each time
         viewModel = ViewModelProvider(this)[PetsViewModel::class.java]
+
+        // Inflate a new binding each time
         _binding = FragmentAddPetBinding.inflate(inflater, container, false)
+
+        // Set explicit background color on root views to prevent transparency
+        binding.root.setBackgroundResource(android.R.color.white)
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Apply solid background colors to input fields to prevent overlay
+        binding.etPetName.setBackgroundResource(android.R.color.white)
+        binding.etPetType.setBackgroundResource(android.R.color.white)
+        binding.etPetBreed.setBackgroundResource(android.R.color.white)
+        binding.etPetAge.setBackgroundResource(android.R.color.white)
+        binding.etPetPrice.setBackgroundResource(android.R.color.white)
+        binding.etPetDescription.setBackgroundResource(android.R.color.white)
+
+        // Clear any previous values to prevent overlays
+        clearAllFields()
 
         // Initialize Firebase
         auth = FirebaseAuth.getInstance()
@@ -73,6 +90,28 @@ class AddPetFragment : Fragment() {
         binding.btnCancel.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
+
+        // Initialize UI state
+        binding.progressBar.visibility = View.GONE
+        binding.tvImageCount.visibility = View.GONE
+    }
+
+    private fun clearAllFields() {
+        // Explicitly clear all text fields
+        binding.etPetName.setText("")
+        binding.etPetType.setText("")
+        binding.etPetBreed.setText("")
+        binding.etPetAge.setText("")
+        binding.etPetPrice.setText("")
+        binding.etPetDescription.setText("")
+
+        // Clear lists
+        selectedImages.clear()
+        localImagePaths.clear()
+
+        // Reset UI elements
+        binding.tvImageCount.text = "0 images selected"
+        binding.tvImageCount.visibility = View.GONE
     }
 
     private fun openImagePicker() {
@@ -140,8 +179,11 @@ class AddPetFragment : Fragment() {
         val name = binding.etPetName.text.toString().trim()
         val type = binding.etPetType.text.toString().trim()
         val breed = binding.etPetBreed.text.toString().trim()
-        val age = binding.etPetAge.text.toString().toInt()
-        val price = binding.etPetPrice.text.toString().toDouble()
+
+        // Add null safety to prevent crashes
+        val age = binding.etPetAge.text.toString().toIntOrNull() ?: 0
+        val price = binding.etPetPrice.text.toString().toDoubleOrNull() ?: 0.0
+
         val description = binding.etPetDescription.text.toString().trim()
 
         val organizationId = auth.currentUser?.uid ?: ""
@@ -177,5 +219,12 @@ class AddPetFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    // Factory method to create new instances
+    companion object {
+        fun newInstance(): AddPetFragment {
+            return AddPetFragment()
+        }
     }
 }

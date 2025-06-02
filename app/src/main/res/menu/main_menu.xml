@@ -3,6 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_map"
+        android:icon="@drawable/ic_map"
+        android:title="Pet Organizations Map"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_reminder"
+        android:icon="@drawable/ic_notification"
+        android:title="Set Pet Reminders"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_settings"
         android:icon="@drawable/ic_settings"
         android:title="@string/settings"
